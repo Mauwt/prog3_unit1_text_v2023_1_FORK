@@ -6,35 +6,40 @@
 #include "text.h"
 using namespace std;
 
-//Cosntructore
+//Cosntructores
 Text::Text (const Text& other){
     len = other.len;
     _text = new char[len +1];
     strcpy(_text, other._text);
 }
 
-Text::Text (const char* _str){ //Constructor por parametros
-    len = strlen(_str);
+Text::Text (const char* _str){ //Constructor x parametro const char
+    len = (int)strlen(_str);
     _text = new char[len + 1];
     strcpy(_text, _str);
 }
 
-Text::Text (std::string& str){
-    len = str.length();
+Text::Text (std::string& str){ //Constructor x parametro string
+    len = (int)str.length();
     _text = new char[len +1];
     std::strcpy(_text, str.c_str());
 }
 
 Text::Text(std::string&& _str){
-    len = _str.length();
+    len = (int)_str.length();
     _text = new char[len + 1];
     std::strcpy(_text, _str.c_str());
 }
 
 Text::Text(Text&& other) noexcept{
     len = other.len;
-    std::swap(_text, other._text);
-    std::swap(len, other.len);
+    delete[] _text;
+
+    _text = new char[len +1];
+    std::strcpy(_text, other._text);
+
+    other._text= nullptr;
+    other.len = 0;
 }
 
 //Asignacion por sobrecarga
@@ -49,15 +54,16 @@ Text& Text::operator=(const Text& other) {
     return *this;
 }
 
-Text& Text::operator = (std::string& _str){
+Text& Text::operator = (const std::string& _str){
     delete[] _text;
     len = (int)_str.length();
     _text = new char[len+1];
     std::strcpy(_text, _str.c_str());
     return *this;
 }
+
 Text::operator std::string() const {
-    return string(_text);
+    return _text;
 }
 
 //Sobrecarga del operador ^ y ^=
@@ -83,7 +89,7 @@ Text &Text::operator ^=(Text &other) {
 }
 
 Text &Text::operator^=(const string &_str) {
-    len += _str.length();
+    len += (int)_str.length();
     char* temp = new char[len + 1] ;
     std::strcpy(temp, _text);
     std::strcat(temp, _str.c_str());
@@ -94,6 +100,7 @@ Text &Text::operator^=(const string &_str) {
     delete[] temp;
     return *this;
 }
+
 
 
 
