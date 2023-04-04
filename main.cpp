@@ -17,7 +17,6 @@ int main() {
 
     Text texto_3;
     getline(cin, texto_3);
-    //std::cin >> texto_3;
     cout << "Texto 3" << endl;
     cout << texto_3 << endl;
 

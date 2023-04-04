@@ -20,46 +20,49 @@ public:
     Text(const char* _str); // Constructor por parametros
     Text(std::string& _str); // Constructor por parametros tipo string
     Text(std::string&& _str); //Constructor por parametros tipo string rvalue
-    Text(Text&& other) noexcept; // Constructor move
+    explicit Text(Text&& other) noexcept; // Constructor move
 
+    virtual ~Text(){
+        delete [] _text;
+    }
     //Asignación por sobrecarga
 
-    operator std::string() const;
+    operator std::string() const; // sobercarga para conversiones
     Text& operator=(const Text& other);
+    Text& operator=(Text&& other);
     Text& operator = (const std::string& _str);
-    //std::string& operator =(const Text& text);
     Text operator^ (const Text& other);
     Text& operator ^= (Text& other);
     Text& operator ^= (const std::string& _str);
+    //std::string& operator =(const Text& text);
 
     //Funciones amigas
-    friend std::istream& getline(std::istream& in, Text& _t){
-        std::string temp;
-        std::getline(in, temp);
-        _t = temp;
-        return in;
-    }
-    friend std::ostream& operator<<(std::ostream& out, const Text& text){
-        out << std::string(text._text) <<" ";
-        return out;
-    }
-    friend std::istream& operator>>(std::istream& in, Text& text){
-        std::string _str;
-        std::getline(std::cin, _str);
-
-        Text temp(_str);
-        text = temp;
-        return in;
-    }
+    friend std::istream& getline(std::istream& in, Text& _t);
+    friend std::ostream& operator<<(std::ostream& out, const Text& text);
+    friend std::istream& operator>>(std::istream& in, Text& text);
 
 };
 
-
-
 #endif //PROG3_UNIT1_TEXT_V2023_1_TEXT_H
 /*
-std::string& operator=(const Text& textObj, std::string& str) {
-    str = textObj.getText();
-    return str;
+std::istream& getline(std::istream& in, Text& _t){
+    std::string temp;
+    std::getline(in, temp);
+    _t = temp;
+    return in;
 }
+std::ostream& operator<<(std::ostream& out, const Text& text)
+{
+    out << std::string(text._text) <<" ";
+    return out;
+}
+std::istream& operator>>(std::istream& in, Text& text){
+    std::string _str;
+    std::getline(std::cin, _str);
+
+    Text temp(_str);
+    text = temp;
+    return in;
+}
+
 */

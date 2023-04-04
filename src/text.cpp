@@ -11,36 +11,37 @@ Text::Text (const Text& other){
     len = other.len;
     _text = new char[len +1];
     strcpy(_text, other._text);
-}
+} //Constructor copy Listo
 
 Text::Text (const char* _str){ //Constructor x parametro const char
     len = (int)strlen(_str);
     _text = new char[len + 1];
     strcpy(_text, _str);
-}
+} // Constructor parametro Listo
 
 Text::Text (std::string& str){ //Constructor x parametro string
     len = (int)str.length();
     _text = new char[len +1];
     std::strcpy(_text, str.c_str());
-}
+} //
 
 Text::Text(std::string&& _str){
     len = (int)_str.length();
+    delete[] _text;
     _text = new char[len + 1];
     std::strcpy(_text, _str.c_str());
-}
+} //
 
 Text::Text(Text&& other) noexcept{
     len = other.len;
-    delete[] _text;
 
-    _text = new char[len +1];
-    std::strcpy(_text, other._text);
+    _text = other._text;
 
     other._text= nullptr;
     other.len = 0;
-}
+} //Constructor move Listo
+
+
 
 //Asignacion por sobrecarga
 
@@ -52,7 +53,18 @@ Text& Text::operator=(const Text& other) {
         strcpy(_text, other._text);
     }
     return *this;
-}
+} //Assigment Copy Listo
+
+Text& Text::operator=(Text&& other){
+    len = other.len;
+    delete[] _text;
+
+    _text = other._text;
+
+    other._text= nullptr;
+    other.len = 0;
+    return *this;
+} //Assigment Move
 
 Text& Text::operator = (const std::string& _str){
     delete[] _text;
@@ -64,7 +76,7 @@ Text& Text::operator = (const std::string& _str){
 
 Text::operator std::string() const {
     return _text;
-}
+}// sobercarga para conversiones
 
 //Sobrecarga del operador ^ y ^=
 
@@ -102,6 +114,25 @@ Text &Text::operator^=(const string &_str) {
 }
 
 
+std::istream& getline(std::istream& in, Text& _t){
+    std::string temp;
+    std::getline(in, temp);
+    _t = temp;
+    return in;
+}
+std::ostream& operator<<(std::ostream& out, const Text& text)
+{
+    out << std::string(text._text) <<" ";
+    return out;
+}
+std::istream& operator>>(std::istream& in, Text& text){
+    std::string _str;
+    std::getline(std::cin, _str);
+
+    Text temp(_str);
+    text = temp;
+    return in;
+}
 
 
 
